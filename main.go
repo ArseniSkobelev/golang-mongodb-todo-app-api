@@ -20,7 +20,7 @@ import (
 )
 
 var _HASHING_LENGTH = 14
-var _HOST = "localhost:3000"
+var _HOST = "localhost:3001"
 var _DATABASE = "programming-finals-2022"
 
 // structs

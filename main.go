@@ -11,6 +11,8 @@ import (
 
 	dbConnection "github.com/ArseniSkobelev/go-mongodb-connection"
 
+	"github.com/gin-contrib/cors"
+
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -279,6 +281,7 @@ func getUserData(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.GET("/", greeting)
 	router.POST("/createUser", createUser)
 	router.POST("/createTodo", createTodo)

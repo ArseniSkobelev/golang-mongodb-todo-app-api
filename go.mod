@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/ArseniSkobelev/go-mongodb-connection v0.0.0-20220509070530-9dc18da5e866
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	go.mongodb.org/mongo-driver v1.9.1
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f

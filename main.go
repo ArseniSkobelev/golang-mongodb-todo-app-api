@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	dbConnection "github.com/ArseniSkobelev/go-mongodb-connection"
 
@@ -90,6 +91,30 @@ func greeting(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Welcome to the todo API. More information at: github.com/ArseniSkobelev/golang-mongodb-todo-app-api"})
 }
 
+func createUser(c *gin.Context) {
+	body, _ := ioutil.ReadAll(c.Request.Body)
+	var tempJson User
+	json.Unmarshal([]byte(body), &tempJson)
+
+	hashedPassword, _ := HashPassword(tempJson.Password)
+
+	var tempUser = User{
+		Username: strings.ToLower(tempJson.Username),
+		Email:    strings.ToLower(tempJson.Email),
+		Password: hashedPassword,
+	}
+
+	usersCollection := dbConnection.MongoConnection().Database(_DATABASE).Collection("users")
+
+	result, err := usersCollection.InsertOne(context.TODO(), tempUser)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var resultString = "Inserted document with _id: " + fmt.Sprintf("%v", result.InsertedID)
+	c.IndentedJSON(http.StatusCreated, gin.H{"message": resultString})
+}
+
 func checkLogin(c *gin.Context) {
 	usersCollection := dbConnection.MongoConnection().Database(_DATABASE).Collection("users")
 
@@ -101,7 +126,7 @@ func checkLogin(c *gin.Context) {
 	}
 
 	filter := &bson.M{
-		"username": tempJson.Username,
+		"username": strings.ToLower(tempJson.Username),
 	}
 
 	var user User
@@ -115,30 +140,6 @@ func checkLogin(c *gin.Context) {
 	} else {
 		c.IndentedJSON(http.StatusForbidden, gin.H{"message": result})
 	}
-}
-
-func createUser(c *gin.Context) {
-	body, _ := ioutil.ReadAll(c.Request.Body)
-	var tempJson User
-	json.Unmarshal([]byte(body), &tempJson)
-
-	hashedPassword, _ := HashPassword(tempJson.Password)
-
-	var tempUser = User{
-		Username: tempJson.Username,
-		Email:    tempJson.Email,
-		Password: hashedPassword,
-	}
-
-	usersCollection := dbConnection.MongoConnection().Database(_DATABASE).Collection("users")
-
-	result, err := usersCollection.InsertOne(context.TODO(), tempUser)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	var resultString = "Inserted document with _id: " + fmt.Sprintf("%v", result.InsertedID)
-	c.IndentedJSON(http.StatusCreated, gin.H{"message": resultString})
 }
 
 func createTodo(c *gin.Context) {
@@ -281,7 +282,9 @@ func getUserData(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
+
 	router.Use(cors.Default())
+
 	router.GET("/", greeting)
 	router.POST("/createUser", createUser)
 	router.POST("/createTodo", createTodo)

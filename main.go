@@ -153,15 +153,22 @@ func createTodo(c *gin.Context) {
 		Owner:  tempJson.Owner,
 	}
 
-	TodosCollection := dbConnection.MongoConnection().Database(_DATABASE).Collection("todos")
+	if tempTodo.Title == "" {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "❌ Missing a todo title!"})
+	} else {
+		TodosCollection := dbConnection.MongoConnection().Database(_DATABASE).Collection("todos")
 
-	result, err := TodosCollection.InsertOne(context.TODO(), tempTodo)
-	if err != nil {
-		fmt.Println(err)
+		result, err := TodosCollection.InsertOne(context.TODO(), tempTodo)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		fmt.Println(result)
+
+		var resultString = "✅ Succesfully created a todo!"
+		c.IndentedJSON(http.StatusCreated, gin.H{"message": resultString})
 	}
 
-	var resultString = "Inserted document with _id: " + fmt.Sprintf("%v", result.InsertedID)
-	c.IndentedJSON(http.StatusCreated, gin.H{"message": resultString})
 }
 
 func changeTodoStatus(c *gin.Context) {
@@ -217,6 +224,8 @@ func getTodos(c *gin.Context) {
 	var tempJson GetTodos
 	json.Unmarshal([]byte(body), &tempJson)
 
+	fmt.Println(tempJson.Owner)
+
 	filter := bson.M{"owner": tempJson.Owner}
 	cursor, err := TodosCollection.Find(context.TODO(), filter)
 	if err != nil {
@@ -238,9 +247,9 @@ func getTodos(c *gin.Context) {
 		allTodos = append(allTodos, tempTodos)
 	}
 	if len(allTodos) > 0 {
-		c.IndentedJSON(http.StatusOK, gin.H{"message": allTodos})
+		c.IndentedJSON(http.StatusOK, gin.H{"message": "✅ Todos loaded succesfully!", "data": allTodos})
 	} else {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Something went wrong"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "❌ No todos found for the given user!"})
 	}
 }
 

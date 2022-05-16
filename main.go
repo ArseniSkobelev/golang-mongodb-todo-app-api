@@ -188,11 +188,17 @@ func changeTodoStatus(c *gin.Context) {
 		log.Fatal(err)
 	}
 
+	selectedTodo := bson.M{"owner": tempJson.Owner, "title": tempJson.Title}
+	deleteResult, err := TodosCollection.DeleteOne(context.TODO(), selectedTodo)
+	if deleteResult.DeletedCount == 0 {
+		log.Fatal("Error on deleting one todo", err)
+	}
+
 	if result.ModifiedCount > 0 {
-		var resultString = "Updated documents: " + fmt.Sprintf("%v", result.ModifiedCount)
+		var resultString = "✅ Todo removed succesfully!"
 		c.IndentedJSON(http.StatusOK, gin.H{"message": resultString})
 	} else {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "Something went wrong"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": "❌ Something went wrong!"})
 	}
 }
 

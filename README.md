@@ -1,3 +1,5 @@
+![GitHub](https://img.shields.io/github/license/ArseniSkobelev/golang-mongodb-todo-app-api)
+
 
 # Golang, MongoDB and Gin TODO API
 

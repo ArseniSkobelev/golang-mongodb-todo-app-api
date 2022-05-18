@@ -139,7 +139,7 @@ Enter the following command to run the code using and host the server at an earl
 
 &nbsp;
 
-**(localhost:3001)/changeTodoStatus** - (POST, {"Owner": USERNAME, "Title": TITLE, "NewStatus": NEWSTATUS}) Changes the given todo's status to the given new status variable. Deletes the todo afterwards to keep a clean db.
+**(localhost:3001)/changeTodoStatus** - (POST, {"Owner": USERNAME, "Title": TITLE, "NewStatus": NEWSTATUS}) Changes the given todo's status to the given new status variable. Deletes the todo afterwards to keep a clean db. Returns - positive or negative message based on the outcome of the request.
 
 
 

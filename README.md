@@ -123,23 +123,23 @@ Enter the following command to run the code using and host the server at an earl
 
   
 
-**(localhost:3001)/createUser** - (POST, {"username": USERNAME, "email": EMAIL, "password": PASSWORD}) Gets data bundled with the POST request, hash the given password and then insert everything to the database in the 'users' collection. Returns - positive or negative message based on the outcome of the request
+**(localhost:3001)/createUser** - (POST, {"username": USERNAME, "email": EMAIL, "password": PASSWORD}) Gets data bundled with the POST request, hash the given password and then insert everything to the database in the 'users' collection. Returns - positive or negative message based on the outcome of the request.
 
   &nbsp;
 
-**(localhost:3001)/createTodo** - (POST, {"title": TITLE, "status": STATUS, "owner": USERNAME}) Gets data bundled with the POST request and insert it into the 'todos' collection. Returns - positive or negative message based on the outcome of the request
+**(localhost:3001)/createTodo** - (POST, {"title": TITLE, "status": STATUS, "owner": USERNAME}) Gets data bundled with the POST request and insert it into the 'todos' collection. Returns - positive or negative message based on the outcome of the request.
 
   &nbsp;
 
-**(localhost:3001)/checkLogin** - (POST, {"username": USERNAME, "password": PASSWORD}) Gets data bundled with the POST request and finds a user with the provided username in 'users' collection. Thereafter check whether the password in the database matches the password provided in the POST requests body. Returns - boolean true or false
+**(localhost:3001)/checkLogin** - (POST, {"username": USERNAME, "password": PASSWORD}) Gets data bundled with the POST request and finds a user with the provided username in 'users' collection. Thereafter check whether the password in the database matches the password provided in the POST requests body. Returns - boolean true or false.
 
   &nbsp;
 
-**(localhost:3001)/getTodos** - (POST, {"owner": USERNAME}) Finds all todos currently active for a given user. Returns - (positive message and all todos in an array) or negative message based on the outcome of the request
+**(localhost:3001)/getTodos** - (POST, {"owner": USERNAME}) Finds all todos currently active for a given user. Returns - (positive message and all todos in an array) or negative message based on the outcome of the request.
 
 &nbsp;
 
-**(localhost:3001)/changeTodoStatus** - (POST, {"owner": USERNAME}) Finds all todos currently active for a given user. Returns - (positive message and all todos in an array) or negative message based on the outcome of the request
+**(localhost:3001)/changeTodoStatus** - (POST, {"Owner": USERNAME, "Title": TITLE, "NewStatus": NEWSTATUS}) Changes the given todo's status to the given new status variable. Deletes the todo afterwards to keep a clean db.
 
 
 
